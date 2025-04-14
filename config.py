@@ -13,7 +13,7 @@ PATH_COLOR = (0, 0, 0)
 DOTS_COLOR = (255, 255, 255)
 
 # Screen dimensions
-SCREEN_WIDTH = 800
+SCREEN_WIDTH = 800 + 200
 SCREEN_HEIGHT = 800
 
 # Cell size

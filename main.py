@@ -28,39 +28,63 @@ class PacManGame:
         self.initialize_game()
     
     def initialize_game(self):
-        # Place Pac-Man and ghosts at valid positions
+    # Place Pac-Man and ghosts at valid positions
         valid_positions = self.get_valid_positions()
         random.shuffle(valid_positions)
         
         pacman_pos = valid_positions.pop()
         self.pacman = PacMan(pacman_pos[0], pacman_pos[1])
         
-        # Initialize ghosts based on level
         self.ghosts = []
-        
-        if self.level >= 1:
+
+        if self.level == 1:
             blue_pos = valid_positions.pop()
             self.blue_ghost = BlueGhost(blue_pos[0], blue_pos[1])
             self.blue_ghost.set_target(self.pacman)
             self.ghosts.append(self.blue_ghost)
-        
-        if self.level >= 2:
+
+        elif self.level == 2:
             pink_pos = valid_positions.pop()
             self.pink_ghost = PinkGhost(pink_pos[0], pink_pos[1])
             self.pink_ghost.set_target(self.pacman)
             self.ghosts.append(self.pink_ghost)
-        
-        if self.level >= 3:
+
+        elif self.level == 3:
             orange_pos = valid_positions.pop()
             self.orange_ghost = OrangeGhost(orange_pos[0], orange_pos[1])
             self.orange_ghost.set_target(self.pacman)
             self.ghosts.append(self.orange_ghost)
-        
-        if self.level >= 4:
+
+        elif self.level == 4:
             red_pos = valid_positions.pop()
             self.red_ghost = RedGhost(red_pos[0], red_pos[1])
             self.red_ghost.set_target(self.pacman)
             self.ghosts.append(self.red_ghost)
+
+        elif self.level >= 5:
+            blue_pos = valid_positions.pop()
+            pink_pos = valid_positions.pop()
+            orange_pos = valid_positions.pop()
+            red_pos = valid_positions.pop()
+
+            self.blue_ghost = BlueGhost(blue_pos[0], blue_pos[1])
+            self.blue_ghost.set_target(self.pacman)
+
+            self.pink_ghost = PinkGhost(pink_pos[0], pink_pos[1])
+            self.pink_ghost.set_target(self.pacman)
+
+            self.orange_ghost = OrangeGhost(orange_pos[0], orange_pos[1])
+            self.orange_ghost.set_target(self.pacman)
+
+            self.red_ghost = RedGhost(red_pos[0], red_pos[1])
+            self.red_ghost.set_target(self.pacman)
+
+            self.ghosts.extend([
+                self.blue_ghost,
+                self.pink_ghost,
+                self.orange_ghost,
+                self.red_ghost
+            ])
     
     def get_valid_positions(self):
         valid = []
@@ -92,26 +116,44 @@ class PacManGame:
         self.pacman.draw(self.screen)
         for ghost in self.ghosts:
             ghost.draw(self.screen)
-    
+    def draw_level_menu(self):
+        menu_x = MAZE_WIDTH * CELL_SIZE + 20
+        y_start = 50
+        for i in range(1, 7):
+            rect = pygame.Rect(menu_x, y_start + (i - 1) * 60, 160, 50)
+            color = (100, 100, 255) if i == self.level else (70, 70, 70)
+            pygame.draw.rect(self.screen, color, rect, border_radius=10)
+            
+            label = self.font.render(f"Level {i}", True, WHITE)
+            label_rect = label.get_rect(center=rect.center)
+            self.screen.blit(label, label_rect)
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-            
-            # Level 6: User-controlled Pac-Man
-            if self.level >= 6:
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_UP:
-                        self.pacman.move("up")
-                    elif event.key == pygame.K_DOWN:
-                        self.pacman.move("down")
-                    elif event.key == pygame.K_LEFT:
-                        self.pacman.move("left")
-                    elif event.key == pygame.K_RIGHT:
-                        self.pacman.move("right")
-                    elif event.key == pygame.K_ESCAPE:
-                        self.running = False
-    
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                menu_x = MAZE_WIDTH * CELL_SIZE + 20
+                for i in range(1, 7):
+                    rect = pygame.Rect(menu_x, 50 + (i - 1) * 60, 160, 50)
+                    if rect.collidepoint(mouse_x, mouse_y):
+                        self.level = i
+                        self.initialize_game()
+                        break
+
+            # Điều khiển Pac-Man (Level 6)
+            if self.level >= 6 and event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    self.pacman.move("up")
+                elif event.key == pygame.K_DOWN:
+                    self.pacman.move("down")
+                elif event.key == pygame.K_LEFT:
+                    self.pacman.move("left")
+                elif event.key == pygame.K_RIGHT:
+                    self.pacman.move("right")
+                elif event.key == pygame.K_ESCAPE:
+                    self.running = False
     def update_ghosts(self):
         ghost_positions = set()
         
@@ -160,6 +202,7 @@ class PacManGame:
             self.draw_maze()
             self.draw_characters()
             self.draw_metrics()
+            self.draw_level_menu()
             
             pygame.display.flip()
             self.clock.tick(GAME_SPEED)  # Slower speed for better visualization     
