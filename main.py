@@ -146,14 +146,7 @@ class PacManGame:
             self.pacman.collect_dot()
             
             # Update ghosts
-            if self.level < 6:
-                # For levels 1-5, ghosts move automatically
-                self.update_ghosts()
-            else:
-                # For level 6, ghosts recalculate path after Pac-Man moves
-                for ghost in self.ghosts:
-                    ghost.path = []  # Clear path to force recalculation
-                self.update_ghosts()
+            self.update_ghosts()
             
             # Draw everything
             self.screen.fill(BLACK)
