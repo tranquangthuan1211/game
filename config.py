@@ -14,7 +14,7 @@ DOTS_COLOR = (255, 255, 255)
 
 # Screen dimensions
 SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 800
+SCREEN_HEIGHT = 700
 
 # Cell size
 CELL_SIZE = 40
@@ -48,4 +48,4 @@ MAZE_LAYOUT = [
 ]
 
 # Game settings
-GAME_SPEED = 5  # Frame rate for visualization
+GAME_SPEED = 3  # Frame rate for visualization
