@@ -70,10 +70,21 @@ class PacManGame:
         self.initialize_game(use_custom_positions=False)
     
     def create_menu_buttons(self):
-        btn_width, btn_height = 200, 40
-        start_x = SCREEN_WIDTH // 2 - btn_width // 2
+        btn_width = 200
+        btn_height = 40
+        spacing = 60
+        col_spacing = 80
+
+        total_width = btn_width * 2 + col_spacing
+        start_x = (SCREEN_WIDTH - total_width) // 2  # Cột trái
+        start_x_right = start_x + btn_width + col_spacing  # Cột phải
+
+
+
         
         self.buttons = {
+      
+
             'start_game': MenuButton(start_x, 100, btn_width, btn_height, "Start Game"),
             'position_pacman': MenuButton(start_x, 160, btn_width, btn_height, "Set Pacman Position"),
             'position_blue': MenuButton(start_x, 220, btn_width, btn_height, "Set Blue Ghost Position"),
@@ -82,6 +93,11 @@ class PacManGame:
             'position_red': MenuButton(start_x, 400, btn_width, btn_height, "Set Red Ghost Position"),
             'random_positions': MenuButton(start_x, 460, btn_width, btn_height, "Use Random Positions")
         }
+        # Bên phải: các nút level nằm ngang tại y = 480
+        # Cột phải: các nút Level 1 đến 6
+        for i in range(6):
+            level_y = 100 + i * spacing
+            self.buttons[f'level_{i+1}'] = MenuButton(start_x_right, level_y, btn_width, btn_height, f"Level {i+1}")
     
     def initialize_game(self, use_custom_positions=True):
         # Reset timer when starting a new game
@@ -210,6 +226,7 @@ class PacManGame:
         for ghost in self.ghosts:
             metrics = ghost.metrics.get_results()
             text = f"{ghost.name}: Time: {metrics['search_time']:.4f}s, Nodes: {metrics['expanded_nodes']}, Memory: {metrics['memory_used']:.2f}KB"
+            print(text)  
             text_surface = self.font.render(text, True, WHITE)
             self.screen.blit(text_surface, (10, y_offset))
             y_offset += 30
@@ -220,11 +237,26 @@ class PacManGame:
             ghost.draw(self.screen)
     
     def draw_menu(self):
-        # Draw title
-        title_font = pygame.font.SysFont('Arial', 36)
-        title_text = title_font.render("Pac-Man Position Selector", True, WHITE)
+        # Thay font cho chữ để nhìn đẹp hơn và thêm hiệu ứng shadow
+        title_font = pygame.font.SysFont('Arial', 50, bold=True)  # Đổi size và bật bold
+        title_text = title_font.render("Game Pac-Man", True, (255, 215, 0))  # Màu vàng
+
+        # Shadow effect (bóng mờ)
+        shadow_text = title_font.render("Game Pac-Man", True, (50, 50, 50))  # Màu đen cho bóng mờ
+        shadow_rect = shadow_text.get_rect(center=(SCREEN_WIDTH // 2 + 3, 50 + 3))  # Di chuyển bóng mờ 3 pixel
+
+        # Vẽ bóng mờ trước
+        self.screen.blit(shadow_text, shadow_rect)
+
+        # Vẽ chữ chính
         title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, 50))
         self.screen.blit(title_text, title_rect)
+
+        # Vẽ các button level
+        for level in range(1, 7):
+            self.buttons[f'level_{level}'].draw(self.screen)
+
+        
         if self.level == 1:
             self.buttons['start_game'].draw(self.screen)
             self.buttons['position_pacman'].draw(self.screen)
@@ -340,7 +372,12 @@ class PacManGame:
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_click = True
-        
+        # Xử lý sự kiện khi nhấn vào các button level
+        for level in range(1, 7):
+            if self.buttons[f'level_{level}'].is_clicked(mouse_pos, mouse_click):
+                self.level = level
+                self.initialize_game(use_custom_positions=False)
+
         if self.selecting_position:
             self.handle_position_selection(mouse_pos, mouse_click)
         else:
