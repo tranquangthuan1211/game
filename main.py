@@ -72,7 +72,7 @@ class PacManGame:
         self.initialize_game(use_custom_positions=False)
     
     def create_menu_buttons(self):
-        btn_width = 200
+        btn_width = 250
         btn_height = 40
         spacing = 60
         col_spacing = 80
@@ -83,10 +83,8 @@ class PacManGame:
 
 
 
-        
+ 
         self.buttons = {
-      
-
             'start_game': MenuButton(start_x, 100, btn_width, btn_height, "Start Game"),
             'position_pacman': MenuButton(start_x, 160, btn_width, btn_height, "Set Pacman Position"),
             'position_blue': MenuButton(start_x, 220, btn_width, btn_height, "Set Blue Ghost Position"),

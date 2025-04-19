@@ -34,3 +34,5 @@ class PacMan(Character):
             self.score += 10
             return True
         return False
+    
+
