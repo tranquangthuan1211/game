@@ -13,8 +13,7 @@ PATH_COLOR = (0, 0, 0)
 DOTS_COLOR = (255, 255, 255)
 
 # Screen dimensions
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 780
+
 
 # Cell size
 CELL_SIZE = 40
@@ -22,6 +21,8 @@ CELL_SIZE = 40
 # Maze dimensions
 MAZE_WIDTH = 20
 MAZE_HEIGHT = 20
+SCREEN_WIDTH = MAZE_WIDTH * CELL_SIZE
+SCREEN_HEIGHT = MAZE_HEIGHT * CELL_SIZE
 
 # Fixed maze layout: 0 = path, 1 = wall
 MAZE_LAYOUT = [
@@ -33,11 +34,11 @@ MAZE_LAYOUT = [
     [1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1],
     [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1],
-    [0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+    [1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1],
     [1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1],
     [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
     [1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1],
-    [0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+    [1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1],
     [1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1],
@@ -48,4 +49,4 @@ MAZE_LAYOUT = [
 ]
 
 # Game settings
-GAME_SPEED = 3  # Frame rate for visualization
+GAME_SPEED = 5  # Frame rate for visualization

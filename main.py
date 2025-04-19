@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 import time
+import math 
 
 from config import (
     BLACK, WHITE, WALL_COLOR, PATH_COLOR, 
@@ -24,12 +25,13 @@ class MenuButton:
         
     def draw(self, screen):
         current_color = self.hover_color if self.is_hovered else self.color
-        pygame.draw.rect(screen, current_color, self.rect)
-        pygame.draw.rect(screen, WHITE, self.rect, 2)  # Border
+        pygame.draw.rect(screen, current_color, self.rect, border_radius=10)  # Thêm bo góc
+        pygame.draw.rect(screen, WHITE, self.rect, 2, border_radius=10)  # Viền bo góc
         
         text_surface = self.font.render(self.text, True, WHITE)
         text_rect = text_surface.get_rect(center=self.rect.center)
         screen.blit(text_surface, text_rect)
+    
         
     def check_hover(self, mouse_pos):
         self.is_hovered = self.rect.collidepoint(mouse_pos)
@@ -235,12 +237,37 @@ class PacManGame:
         self.pacman.draw(self.screen)
         for ghost in self.ghosts:
             ghost.draw(self.screen)
-    
-    def draw_menu(self):
-        # Thay font cho chữ để nhìn đẹp hơn và thêm hiệu ứng shadow
-        title_font = pygame.font.SysFont('Arial', 50, bold=True)  # Đổi size và bật bold
-        title_text = title_font.render("Game Pac-Man", True, (255, 215, 0))  # Màu vàng
 
+    def draw_gradient_background(self, color1, color2):
+        #Vẽ nền gradient từ màu color1 đến color2.
+        for y in range(SCREEN_HEIGHT):
+            # Tính màu sắc cho từng dòng
+            ratio = y / SCREEN_HEIGHT
+            r = int(color1[0] * (1 - ratio) + color2[0] * ratio)
+            g = int(color1[1] * (1 - ratio) + color2[1] * ratio)
+            b = int(color1[2] * (1 - ratio) + color2[2] * ratio)
+            pygame.draw.line(self.screen, (r, g, b), (0, y), (SCREEN_WIDTH, y))
+        
+    def draw_menu(self):
+        # Hình nền
+        self.draw_gradient_background((0, 0, 0), (128, 0, 128))  # Đen -> Tím
+
+        # Tiêu đề chuyển màu
+        title_font = pygame.font.Font('freesansbold.ttf', 50, bold=True)
+        time_color = (
+            int((math.sin(time.time()) + 1) * 127),
+            int((math.cos(time.time()) + 1) * 127),
+            255,
+        )
+        # Tiêu đề
+        title_text = title_font.render("Game Pac-Man", True, time_color)
+        title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, 50))
+        self.screen.blit(title_text, title_rect)
+    
+        # Vẽ các nút
+        for button in self.buttons.values():
+            button.draw(self.screen)
+       
         # Shadow effect (bóng mờ)
         shadow_text = title_font.render("Game Pac-Man", True, (50, 50, 50))  # Màu đen cho bóng mờ
         shadow_rect = shadow_text.get_rect(center=(SCREEN_WIDTH // 2 + 3, 50 + 3))  # Di chuyển bóng mờ 3 pixel

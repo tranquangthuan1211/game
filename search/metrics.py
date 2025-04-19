@@ -1,5 +1,3 @@
-# search/metrics.py - Search performance metrics
-
 import time
 import psutil
 import os
@@ -15,12 +13,12 @@ class SearchMetrics:
         self.memory_used = 0
         
     def start_tracking(self):
-        self.start_time = time.time()
+        self.start_time = time.perf_counter()  
         self.memory_usage_start = self.get_memory_usage()
         self.expanded_nodes = 0
     
     def end_tracking(self):
-        self.end_time = time.time()
+        self.end_time = time.perf_counter()  
         self.memory_usage_end = self.get_memory_usage()
         self.search_time = self.end_time - self.start_time
         self.memory_used = self.memory_usage_end - self.memory_usage_start
